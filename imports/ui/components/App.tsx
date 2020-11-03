@@ -11,8 +11,8 @@ const App = (props:any):JSX.Element => {
     <ThemeProvider theme={theme}>
       <Router>
         <Switch>
-          <Route path="/" Component={Login} />
-          <Route path="/chats" Component={Main} />
+          <Route path="/" component={Login} exact/>
+          <Route path="/chats" component={Main} exact/>
         </Switch>
       </Router>
     </ThemeProvider>
