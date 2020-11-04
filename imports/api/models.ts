@@ -10,3 +10,27 @@ export interface User {
     password?: string;
     profile?: Profile;
 }
+
+export interface Chat {
+    _id?: string;
+    title?: string;
+    picture?: string;
+    participants?: string[];
+    lastMessage?: Message;
+}
+
+export interface Message {
+    _id?: string;
+    chatId?: string;
+    content?: string;
+    createdAt?: Date;
+    type?: MessageType;
+    ownership?: string;
+    senderId?: string;
+    read?: string;
+}
+
+export enum MessageType{
+    TEXT = 'text',
+    IMAGE = 'image'
+}
