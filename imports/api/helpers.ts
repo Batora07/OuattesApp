@@ -1,8 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 
-import { User, Chat } from './models';
+import { User, Chat, Message } from './models';
 import { Accounts } from 'meteor/accounts-base';
 import { ChatsCollection } from './chats';
+import { MessagesCollection } from './messages';
 
 export const createDummyUsers = (users:User[]) => {
     users.forEach(user => {
@@ -20,6 +21,13 @@ export const createDummyChats = (chats: Chat[]):void => {
         ChatsCollection.insert(chat);
     })
 }
+
+export const createDummyMessages = (messages: Message[]):void => {
+    messages.forEach(message => {
+        MessagesCollection.insert(message);
+    })
+}
+
 
 export const findChats = ():Chat[] => {
     return ChatsCollection.find().fetch().map(chatCollection => {

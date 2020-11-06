@@ -11,7 +11,7 @@ import ChatList from './ChatList';
 const icons:string[] = ["circle-notch", "comment-alt", "ellipsis-v"];
 
 const Left = (props:any):JSX.Element => {
-    const { chats } = props;
+    const { chats, onChatClick, selectedChat } = props;
 
     return (
         <StyledLeft>
@@ -20,7 +20,11 @@ const Left = (props:any):JSX.Element => {
             </Header>
             <Status />
             <Searchbar />
-            <ChatList chats={chats} />
+            <ChatList 
+                chats={chats} 
+                onChatClick={onChatClick} 
+                selectedChat={selectedChat}
+            />
         </StyledLeft>
     )
 }
