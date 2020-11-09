@@ -27,7 +27,7 @@ export interface Message {
     type?: MessageType;
     ownership?: string;
     senderId?: string;
-    read?: string;
+    read?: boolean;
 }
 
 export enum MessageType{

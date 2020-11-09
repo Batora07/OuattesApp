@@ -8,7 +8,20 @@ import Status from './Status';
 import Searchbar from './Searchbar';
 import ChatList from './ChatList';
 
-const icons:string[] = ["circle-notch", "comment-alt", "ellipsis-v"];
+const icons:any[] = [
+    {
+        name: "circle-notch",
+        func: () => {}
+    }, 
+    { 
+        name: "comment-alt",
+        func: () => {}
+    },
+    {
+        name: "ellipsis-v",
+        func: () => {}
+    }
+];
 
 const Left = (props:any):JSX.Element => {
     const { chats, onChatClick, selectedChat } = props;

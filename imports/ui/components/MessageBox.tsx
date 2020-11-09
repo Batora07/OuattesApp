@@ -2,17 +2,23 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import _ from 'lodash';
 import moment from 'moment';
+import FlipMove from 'react-flip-move';
 
 import StyledMessageBox from '../elements/StyledMessageBox';
 import Day from './Day';
 import MessageText from './MessageText';
+import MessageImage from './MessageImage';
+import FABs from './FABs';
 
 let isEven:boolean = false;
 
 const format:string = "D MMMM YYYY";
+let messagesEnd:HTMLDivElement;
 
 const MessageBox = (props:any):JSX.Element => {
-    const {messages} = props;
+
+    const {selectedChat, messages, fabVisible, onFABItemClick, onInputChange} = props;
+
     // messages est un tableau
     messages.forEach(message => {
         // on alterne l'apparition des messages, l'un m'appartient l'autre appartient au correspondant
@@ -41,18 +47,39 @@ const MessageBox = (props:any):JSX.Element => {
     });
 
     const renderMessages = (newMessage:any):JSX.Element[] => {
+        console.log('messages', newMessage.groupedMessages);
         return newMessage.groupedMessages.map(message => {
             const msgClass:string = `message message--${message.ownership}`;
+            if(message.type === "image") {
+                const mine:boolean = message.ownership === "mine";
+                return (
+                    <MessageImage 
+                        key={message._id}
+                        content={message.content}
+                        createdAt={message.createdAt}
+                        mine={mine}
+                    />
+                )
+            }
             return (
                 <MessageText 
                     key={message._id}
                     msgClass={msgClass}
                     content={message.content}
                     ownership={message.ownership}
+                    createdAt={message.createdAt}
                 />
             )
         })
     }
+
+    const scrollToBottom = ():void => {
+        messagesEnd.scrollIntoView({behavior: "smooth"});
+    }
+
+    React.useEffect(()=>{
+        scrollToBottom();
+    }, [selectedChat, messages]);
 
     const renderDays = ():JSX.Element[] => {
         return newMessages.map((newMessage, index:number) => {
@@ -68,7 +95,15 @@ const MessageBox = (props:any):JSX.Element => {
 
     return (
         <StyledMessageBox>
-            {renderDays()}
+            <FABs 
+                onFABItemClick={onFABItemClick}
+                onInputChange={onInputChange}
+                fabVisible={fabVisible}                 
+            />
+            <FlipMove>
+                {renderDays()}
+            </FlipMove>            
+            <div ref={(el:HTMLDivElement) => messagesEnd = el} />
         </StyledMessageBox>
     )
 }

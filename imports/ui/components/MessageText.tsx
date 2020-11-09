@@ -1,5 +1,6 @@
 import React from 'react';
 import FontAwesome from 'react-fontawesome';
+import Moment from 'react-moment';
 
 const MessageText = (props:any):JSX.Element => {
      return (
@@ -7,7 +8,11 @@ const MessageText = (props:any):JSX.Element => {
             <div className={props.msgClass}>
                 <p>{props.content}</p>
                 <div className="detailsContainer">
-                    <span>11:33</span>
+                    <span>
+                        <Moment format="HH:mm">
+                            {props.createdAt}
+                        </Moment>
+                    </span>
                     {
                         props.ownership == "mine" ?
                             <FontAwesome name="check-double" /> : null

@@ -1,5 +1,6 @@
 import React from 'react';
 import FontAwesome from 'react-fontawesome';
+import { MessageType } from '../../api/models';
 
 import StyledFooter from '../elements/StyledFooter';
 
@@ -10,6 +11,15 @@ const Footer = (props:any):JSX.Element => {
         setInputValue(e.target.value);
         const name:string = e.target.value !== "" ? "paper-plane" : "microphone";
         setIconName(name);
+    }
+
+    const handleClick = ():void => {
+        if(iconName === "microphone"){
+            return;
+        }
+        props.onSend(inputValue, MessageType.TEXT);
+        setInputValue("");
+        setIconName("microphone");
     }
 
     return (
@@ -28,6 +38,7 @@ const Footer = (props:any):JSX.Element => {
             <FontAwesome 
                 className="iconFooter"
                 name={iconName}
+                onClick={handleClick}
             />
         </StyledFooter>
     )

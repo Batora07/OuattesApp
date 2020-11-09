@@ -22,3 +22,5 @@ fourseven:scss
 barbatus:typescript
 server-render
 accounts-password
+ostrio:files
+session

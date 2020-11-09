@@ -7,7 +7,10 @@ import ChatItem from './ChatItem';
 const ChatList = (props:any):JSX.Element => {
     const { chats, onChatClick, selectedChat } = props;
     const renderChats = ():JSX.Element[] => {
-        return chats.map((chat:Chat) => {
+        return chats.sort((a:Chat, b:Chat) => {
+            return b.lastMessage.createdAt.getTime() - a.lastMessage.createdAt.getTime();
+        })
+        .map((chat:Chat) => {
             const active:boolean = selectedChat._id === chat._id;
             return (
                 <ChatItem
