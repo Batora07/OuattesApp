@@ -7,11 +7,15 @@ import MessageView from './MessageView';
 const messageText:string = "Ouattesapp se connecte à votre téléphone pour synchroniser les messages. Pour réduire l'utilisation des données, connectez votre téléphone à un réseau wifi."
 
 const Right = (props:any):JSX.Element => {
-    const { right, messageVisible, selectedChat } = props;
+    const { right, messageVisible, selectedChat, onAvatarClick, OPVisible } = props;
     return (
-        <StyledRight>
+        <StyledRight OPVisible={OPVisible}>
             {messageVisible ? (
-                <MessageView selectedChat={selectedChat} />
+                <MessageView 
+                    onAvatarClick={onAvatarClick} 
+                    selectedChat={selectedChat} 
+                    OPVisible={OPVisible}    
+                />
             ) : (
                 <RightImg right={props.right} messageText={messageText} />
             )}

@@ -4,11 +4,12 @@ import StyledAvatar from '../elements/StyledAvatar';
 
 const Avatar = (props:any):JSX.Element => {
     return (
-        <StyledAvatar>
+        <StyledAvatar big={props.big}>
             <img 
                 src={props.avatar_url}
                 alt="avatar"
                 className="avatar--img"
+                onClick={props.onAvatarClick}
             />
         </StyledAvatar>
     )

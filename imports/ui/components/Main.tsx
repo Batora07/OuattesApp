@@ -10,6 +10,7 @@ import { ChatsCollection } from '../../api/chats';
 import { findChats } from '../../api/helpers';
 import { Chat } from '../../api/models';
 import _ from 'lodash';
+import OtherProfile from './OtherProfile';
 
 const Main = (props:any):JSX.Element => {
 
@@ -26,6 +27,8 @@ const Main = (props:any):JSX.Element => {
 
     const [messageVisible, setMessageVisible] = React.useState<boolean>(false);
     const [selectedChat, setSelectedChat] = React.useState<Chat>({});
+    // OP = Other Profile
+    const [OP, setOP] = React.useState<any>({});
 
     const handleChatClick = (_id:string):void => {
         // console.log('selected chat before', selectedChat);
@@ -37,20 +40,46 @@ const Main = (props:any):JSX.Element => {
         setSelectedChat(newChat);
     }
 
+    const handleClose = ():void => {
+        setOP({
+            visible: false,
+            otherId : ""
+        });
+    }
+
+    const handleAvatarClick = (otherId:string):void => {
+        setOP({
+            visible: true,
+            otherId
+        });
+    }
+
     return (
         <StyledMain>
             {!props.loading ? (
                 <React.Fragment>
                     <Left 
+                        OPVisible={OP.visible}
                         chats={props.chats} 
                         onChatClick={handleChatClick}
                         selectedChat={selectedChat}
                     />
                     <Right 
+                        OPVisible={OP.visible}
                         right 
                         messageVisible={messageVisible}
-                        selectedChat={selectedChat} 
+                        selectedChat={selectedChat}
+                        onAvatarClick={handleAvatarClick} 
                     />
+                    {
+                        OP.visible ? (
+                            <OtherProfile
+                                otherUserId={OP.otherId}
+                                onClose={handleClose}
+                            />
+                        ) : 
+                        null
+                    }
                 </React.Fragment>
             ) :
                 null

@@ -13,7 +13,7 @@ import Modal from './Modal';
 import { MessagesCollection } from '../../api/messages';
 import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session';
-import { uploadFile } from '../../api/helpers';
+import { uploadFile, findOtherId } from '../../api/helpers';
 
 let fileInput:any;
 
@@ -71,6 +71,11 @@ const MessageView = (props:any):JSX.Element => {
         }
     }
 
+    const avatarClick = ():void => {
+        const otherId:string = findOtherId(selectedChat.participants);
+        props.onAvatarClick(otherId);
+    }
+
     const handleSend = (content:string, type:MessageType):void => {
         const message:Message = {
             chatId: selectedChat._id,
@@ -111,8 +116,11 @@ const MessageView = (props:any):JSX.Element => {
 
     return (
         <StyledMessageView>
-            <Header iconClass="greyIcon" icons={icons}>
-                <Avatar avatar_url={selectedChat.picture} />
+            <Header OPVisible={props.OPVisible} iconClass="greyIcon" icons={icons}>
+                <Avatar 
+                    avatar_url={selectedChat.picture} 
+                    onAvatarClick={avatarClick} 
+                />
                 <div className="headerMsg--container">
                     <span className="headerMsg--title">{selectedChat.title}</span>    
                     <span className="headerMsg--sbTitle">en ligne</span>    
