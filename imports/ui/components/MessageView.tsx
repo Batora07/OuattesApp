@@ -96,7 +96,7 @@ const MessageView = (props:any):JSX.Element => {
             }
             else{
                 console.log('res', id);
-                uploadFile(fileInput);
+                uploadFile(fileInput, true);
                 Tracker.autorun(() => {
                     const imageUrl:string = Session.get('wwc__imageUrl');
                     if(imageUrl && message.type === "image"){

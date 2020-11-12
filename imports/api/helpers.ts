@@ -80,7 +80,7 @@ const findLastMessage = (chatId:string):Message => {
     // on récupère le message le plus récent
 }
 
-export const uploadFile = (file:any):void => {
+export const uploadFile = (file:any, isMessage:boolean):void => {
     const fileUpload = ImagesCollection.insert({
         file,
         streams: "dynamic",
@@ -97,15 +97,27 @@ export const uploadFile = (file:any):void => {
         }
         else {
             const _id:string = fileObj._id;
-            Meteor.call('images.url', _id, (err, url) => {
-                if(err){
-                    console.log('err', err);
-                }
-                else{
-                    console.log('url', url);
-                    Session.set('wwc__imageUrl', url);
-                }
-            })
+            if(isMessage){
+                Meteor.call('images.url', _id, (err, url) => {
+                    if(err){
+                        console.log('err', err);
+                    }
+                    else{
+                        console.log('url', url);
+                        Session.set('wwc__imageUrl', url);
+                    }
+                })
+            }
+            else{
+                Meteor.call('user.picture', _id, (err, url) => {
+                    if(err){
+                        console.log('err', err);
+                    }
+                    else{
+                        console.log('url', url);
+                    }
+                })
+            }
         }
     });
     fileUpload.on('err', (err, fileObj) => {
