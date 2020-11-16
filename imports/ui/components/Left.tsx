@@ -11,31 +11,52 @@ import ChatList from './ChatList';
 import LeftSide from './LeftSide';
 import LSHeader from './LSHeader';
 import LSForm from './LSForm';
-
-const icons:any[] = [
-    {
-        name: "circle-notch",
-        func: () => {}
-    }, 
-    { 
-        name: "comment-alt",
-        func: () => {}
-    },
-    {
-        name: "ellipsis-v",
-        func: () => {}
-    }
-];
+import UsersList from './UsersList';
 
 const Left = (props:any):JSX.Element => {
+    const icons:any[] = [
+        {
+            name: "circle-notch",
+            func: () => {}
+        }, 
+        { 
+            name: "comment-alt",
+            func: () => {showUList()}
+        },
+        {
+            name: "ellipsis-v",
+            func: () => {}
+        }
+    ];
+
     const { chats, onChatClick, selectedChat, OPVisible, picture } = props;
     const [LSVisible, setLSVisible] = React.useState<boolean>(false);
+    const [UListVisible, setUListVisible] = React.useState<boolean>(false);
+
+    const showUList = ():void => {
+        setLSVisible(true);
+        setUListVisible(true);
+    }
+
+    const userItemClick = (_id:string, username:string, picture:string):void => {
+        toggleLS();
+        props.onUserItemClick(_id, username, picture);
+    }
 
     // LS = LeftSide
     const renderLSComponent = ():JSX.Element => {
+        if(UListVisible){
+            return (
+                <>
+                    <LSHeader title="Nouvelle Discussion" onLSClose={toggleLS} />
+                    <Searchbar placeholder="Chercher Contact" />
+                    <UsersList onUserItemClick={userItemClick} />
+                </>
+            )
+        }
         return (
             <>
-                <LSHeader onLSClose={toggleLS} />
+                <LSHeader title="Profil" onLSClose={toggleLS} />
                 <div className="LS--avatar">
                     <Avatar     
                         inLS                    
@@ -58,6 +79,7 @@ const Left = (props:any):JSX.Element => {
         }
         else{
             setLSVisible(false);
+            setUListVisible(false);
         }
     }; 
 
@@ -73,7 +95,7 @@ const Left = (props:any):JSX.Element => {
                         />
                         </Header>
                         <Status />
-                        <Searchbar />
+                        <Searchbar placeholder="Rechercher ou Démarrer une discussion" />
                         <ChatList 
                             chats={chats} 
                             onChatClick={onChatClick} 

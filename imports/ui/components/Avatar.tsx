@@ -57,7 +57,7 @@ const Avatar = (props:any):JSX.Element => {
     }
 
     return (
-        <StyledAvatar big={props.big}>
+        <StyledAvatar large={props.large} big={props.big}>
             <img 
                 src={props.avatar_url}
                 alt="avatar"

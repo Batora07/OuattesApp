@@ -73,10 +73,16 @@ export const findOtherUser = (_id:string):User => {
 }
 
 const findLastMessage = (chatId:string):Message => {
-    return MessagesCollection.find({chatId}, {
-        // afficher les messages dans l'ordre décroissant
-        sort: {createdAt: -1}
-    }).fetch()[0];
+    const Msg:Message[] = MessagesCollection.find({chatId}, {
+            // afficher les messages dans l'ordre décroissant
+            sort: {createdAt: -1}
+        }).fetch();
+
+    if(!Msg[0]){
+        return ChatsCollection.findOne(chatId).lastMessage;
+    }
+    
+    return Msg[0];
     // on récupère le message le plus récent
 }
 

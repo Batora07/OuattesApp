@@ -10,7 +10,7 @@ const LSHeader = (props:any):JSX.Element => {
                     name="arrow-left"
                     onClick={props.onLSClose}
                 />
-                <span>Profil</span>
+                <span>{props.title}</span>
             </div>
         </div>
     )
