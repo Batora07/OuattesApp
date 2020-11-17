@@ -134,3 +134,21 @@ export const uploadFile = (file:any, isMessage:boolean):void => {
     });
     fileUpload.start();
 }
+
+export const getBadges = (chatId:string):number => {
+    const participants:string[] = ChatsCollection.findOne(chatId).participants;
+    const otherId:string = findOtherId(participants);
+    const badge:number = MessagesCollection.find({chatId, senderId: otherId, read: false}).count();
+    return badge;
+}
+
+export const updateBadges = (participants:string[], chatId:string):void => {
+    const otherId:string = findOtherId(participants);
+    Meteor.call('message.update.badges', chatId, otherId, (err, res) => {
+        if(err){
+            console.log('err', err);
+        } else {
+            console.log('res', res);
+        }
+    })
+}

@@ -9,6 +9,7 @@ import Day from './Day';
 import MessageText from './MessageText';
 import MessageImage from './MessageImage';
 import FABs from './FABs';
+import { updateBadges } from '../../api/helpers';
 
 let isEven:boolean = false;
 
@@ -58,12 +59,15 @@ const MessageBox = (props:any):JSX.Element => {
                         content={message.content}
                         createdAt={message.createdAt}
                         mine={mine}
+                        onImgClick={() => props.onMsgClick(message._id, "image")}
                     />
                 )
             }
             return (
                 <MessageText 
+                    onClick = {props.onMsgClick}
                     key={message._id}
+                    id={message._id}
                     msgClass={msgClass}
                     content={message.content}
                     ownership={message.ownership}
@@ -79,6 +83,7 @@ const MessageBox = (props:any):JSX.Element => {
 
     React.useEffect(()=>{
         scrollToBottom();
+        updateBadges(selectedChat.participants, selectedChat._id);
     }, [selectedChat, messages]);
 
     const renderDays = ():JSX.Element[] => {

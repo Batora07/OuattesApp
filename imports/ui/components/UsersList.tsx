@@ -58,14 +58,14 @@ const UsersList = (props:any):JSX.Element => {
     )
 }
 
-export default withTracker(() => {
+export default withTracker((props:any) => {
     return {
-        users: Meteor.users.find({_id: {
+        users: props.pattern === "" ? Meteor.users.find({_id: {
             $ne: Meteor.userId()
         }}, {
             sort:{
                 username: 1
             }
-        }).fetch()
+        }).fetch() : props.users2
     }
 })(UsersList);

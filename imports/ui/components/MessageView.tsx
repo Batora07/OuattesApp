@@ -141,6 +141,7 @@ const MessageView = (props:any):JSX.Element => {
                             fabVisible={fabVisible}
                             onFABItemClick={handleInputClick}
                             onInputChange={handleInputChange}
+                            onMsgClick={props.onMsgClick}
                         />
                         <Footer onSend={handleSend} />
                     </React.Fragment>

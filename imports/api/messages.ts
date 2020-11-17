@@ -21,6 +21,20 @@ if(Meteor.isServer){
                   content
                 }
               })
+            },
+            "message.update.badges": function(chatId:string, otherId:string){
+              return MessagesCollection.update({
+                chatId, senderId: otherId
+              }, {
+                $set: {
+                  read: true
+                }
+              }, {
+                multi: true
+              });
+            },
+            "message.delete": function(_id:string){
+              return MessagesCollection.remove(_id);
             }
         }
     )

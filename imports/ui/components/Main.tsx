@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 // import { Tracker } from 'meteor/tracker';
 import { withTracker } from 'meteor/react-meteor-data';
 import moment from 'moment';
+import { Session } from 'meteor/session';
 
 import Left from './Left';
 import Right from './Right';
@@ -14,11 +15,16 @@ import { findChats } from '../../api/helpers';
 import { Chat, MessageType } from '../../api/models';
 import _ from 'lodash';
 import OtherProfile from './OtherProfile';
+import Popup from './Popup';
 
 const initialBigOverlay:any = {
     image: {
         visible: false,
         url: ""
+    },
+    popup: {
+        visible: false,
+        title: ""
     }
 }
 
@@ -109,7 +115,38 @@ const Main = (props:any):JSX.Element => {
                 image: {
                     visible: false,
                     url: ""
+                },
+                popup: {
+                    visible: false,
+                    title: ""
                 }
+            }
+        })
+    }
+
+    const handleMsgClick = (msgId: string, type:string):void => {
+        Session.set('wwc--message__id', msgId);
+
+        setBOVisible(prevState => {
+            return {
+                ...prevState,
+                popup: {
+                    visible: true,
+                    title: type==="text" ? "Supprimer le message ?" : "Supprimer l'image ?"
+                }
+            }
+        })
+    }
+
+    const handleDeleteMsg = ():void => {
+        const msgId:string = Session.get('wwc--message__id');
+        Meteor.call('message.delete', msgId, (err, res) => {
+            if(err){
+                console.log("erreur", err);
+            }
+            else {
+                console.log("res", res);
+                handleCloseBO();
             }
         })
     }
@@ -131,7 +168,18 @@ const Main = (props:any):JSX.Element => {
                         messageVisible={messageVisible}
                         selectedChat={selectedChat}
                         onAvatarClick={handleAvatarClick} 
+                        onMsgClick={handleMsgClick}
                     />
+
+                    {BOVisible.popup.visible ? (
+                        <BigOverlay>
+                            <Popup 
+                                cancel={handleCloseBO}
+                                title={BOVisible.popup.title} 
+                                onDelete={handleDeleteMsg}
+                            />
+                        </BigOverlay>
+                    ) : null}
 
                     {BOVisible.image.visible ? (
                         <BigOverlay>

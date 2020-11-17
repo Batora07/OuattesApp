@@ -12,6 +12,7 @@ import LeftSide from './LeftSide';
 import LSHeader from './LSHeader';
 import LSForm from './LSForm';
 import UsersList from './UsersList';
+import { User } from '../../api/models';
 
 const Left = (props:any):JSX.Element => {
     const icons:any[] = [
@@ -32,6 +33,8 @@ const Left = (props:any):JSX.Element => {
     const { chats, onChatClick, selectedChat, OPVisible, picture } = props;
     const [LSVisible, setLSVisible] = React.useState<boolean>(false);
     const [UListVisible, setUListVisible] = React.useState<boolean>(false);
+    const [pattern, setPattern] = React.useState<string>("");
+    const [users2, setUsers] = React.useState<User[]>([]);
 
     const showUList = ():void => {
         setLSVisible(true);
@@ -43,14 +46,34 @@ const Left = (props:any):JSX.Element => {
         props.onUserItemClick(_id, username, picture);
     }
 
+    const handleUserSearch = (pattern:string):void => {
+        setPattern(pattern);
+        setUsers(Meteor.users.find({
+            _id: {$ne: Meteor.userId()},
+            username: {$regex: pattern, $options: 'i'}
+        }, 
+        {
+            sort: {
+                username: 1
+            }
+        }).fetch());
+    }
+
     // LS = LeftSide
     const renderLSComponent = ():JSX.Element => {
         if(UListVisible){
             return (
                 <>
                     <LSHeader title="Nouvelle Discussion" onLSClose={toggleLS} />
-                    <Searchbar placeholder="Chercher Contact" />
-                    <UsersList onUserItemClick={userItemClick} />
+                    <Searchbar 
+                        placeholder="Chercher Contact" 
+                        onSearch={handleUserSearch}
+                    />
+                    <UsersList 
+                        onUserItemClick={userItemClick} 
+                        pattern={pattern}
+                        users2={users2}
+                    />
                 </>
             )
         }
